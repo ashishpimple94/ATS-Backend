@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Reply Admin Panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .card {
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            border: 1px solid rgba(0, 0, 0, 0.125);
+        }
+        .stat-card {
+            text-align: center;
+            padding: 20px;
+        }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .stat-label {
+            font-size: 1rem;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="text-center mb-4">Auto Reply Admin Panel</h1>
+                
+                <!-- Login Form -->
+                <div id="loginSection">
+                    <div class="card mx-auto" style="max-width: 500px;">
+                        <div class="card-header">
+                            <h4>Login</h4>
+                        </div>
+                        <div class="card-body">
+                            <form id="loginForm">
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="password" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Login</button>
+                            </form>
+                            <hr>
+                            <p class="text-center">Don't have an account? <a href="#" id="showRegister">Register</a></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Registration Form -->
+                <div id="registerSection" style="display: none;">
+                    <div class="card mx-auto" style="max-width: 500px;">
+                        <div class="card-header">
+                            <h4>Register Admin</h4>
+                        </div>
+                        <div class="card-body">
+                            <form id="registerForm">
+                                <div class="mb-3">
+                                    <label for="regUsername" class="form-label">Username</label>
+                                    <input type="text" class="form-control" id="regUsername" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="regEmail" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="regEmail" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="regPassword" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="regPassword" required>
+                                </div>
+                                <button type="submit" class="btn btn-success w-100">Register</button>
+                            </form>
+                            <hr>
+                            <p class="text-center"><a href="#" id="showLogin">Back to Login</a></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard -->
+                <div id="dashboardSection" style="display: none;">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h4>Dashboard</h4>
+                            <button id="logoutBtn" class="btn btn-outline-danger">Logout</button>
+                        </div>
+                        <div class="card-body">
+                            <!-- Stats Cards -->
+                            <div class="row mb-4">
+                                <div class="col-md-3 col-sm-6">
+                                    <div class="card stat-card">
+                                        <div class="stat-number" id="totalKeys">0</div>
+                                        <div class="stat-label">Total Keys</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-6">
+                                    <div class="card stat-card">
+                                        <div class="stat-number" id="activeKeys">0</div>
+                                        <div class="stat-label">Active Keys</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-6">
+                                    <div class="card stat-card">
+                                        <div class="stat-number" id="usedKeys">0</div>
+                                        <div class="stat-label">Used Keys</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-6">
+                                    <div class="card stat-card">
+                                        <div class="stat-number" id="totalMessages">0</div>
+                                        <div class="stat-label">Total Messages</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Generate Keys Section -->
+                            <div class="row mb-4">
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>Generate Activation Keys</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <form id="generateKeysForm">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <label for="numKeys" class="form-label">Number of Keys</label>
+                                                        <input type="number" class="form-control" id="numKeys" min="1" max="100" value="1" required>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label for="expiresAt" class="form-label">Expiry Date (optional)</label>
+                                                        <input type="date" class="form-control" id="expiresAt">
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label>&nbsp;</label>
+                                                        <button type="submit" class="btn btn-primary w-100">Generate Keys</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <div id="generatedKeys" class="mt-3" style="display: none;">
+                                                <h6>Generated Keys:</h6>
+                                                <ul id="keysList" class="list-group"></ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Recent Keys Table -->
+                            <div class="row mb-4">
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>Activation Keys</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Key</th>
+                                                            <th>Status</th>
+                                                            <th>Created By</th>
+                                                            <th>Used By</th>
+                                                            <th>Created At</th>
+                                                            <th>Used At</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="keysTableBody">
+                                                        <!-- Keys will be populated here -->
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Recent Messages Table -->
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>Recent Messages</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Phone Number</th>
+                                                            <th>Message</th>
+                                                            <th>Sent At</th>
+                                                            <th>Device ID</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="messagesTableBody">
+                                                        <!-- Messages will be populated here -->
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // API Base URL - Update this to your actual server URL
+        const API_BASE_URL = '/api';
+
+        // DOM Elements
+        const loginSection = document.getElementById('loginSection');
+        const registerSection = document.getElementById('registerSection');
+        const dashboardSection = document.getElementById('dashboardSection');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const showRegisterLink = document.getElementById('showRegister');
+        const showLoginLink = document.getElementById('showLogin');
+        const generateKeysForm = document.getElementById('generateKeysForm');
+
+        // Auth token
+        let authToken = localStorage.getItem('authToken');
+
+        // Check if user is already logged in
+        if (authToken) {
+            showDashboard();
+        }
+
+        // Event Listeners
+        loginForm.addEventListener('submit', handleLogin);
+        registerForm.addEventListener('submit', handleRegister);
+        logoutBtn.addEventListener('click', handleLogout);
+        showRegisterLink.addEventListener('click', () => {
+            loginSection.style.display = 'none';
+            registerSection.style.display = 'block';
+        });
+        showLoginLink.addEventListener('click', () => {
+            registerSection.style.display = 'none';
+            loginSection.style.display = 'block';
+        });
+        generateKeysForm.addEventListener('submit', handleGenerateKeys);
+
+        // Functions
+        async function handleLogin(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    authToken = data.token;
+                    localStorage.setItem('authToken', authToken);
+                    showDashboard();
+                    loadDashboardData();
+                } else {
+                    alert(data.message || 'Login failed');
+                }
+            } catch (error) {
+                alert('Network error: ' + error.message);
+            }
+        }
+
+        async function handleRegister(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('regUsername').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert('Registration successful! Please login.');
+                    registerSection.style.display = 'none';
+                    loginSection.style.display = 'block';
+                } else {
+                    alert(data.message || 'Registration failed');
+                }
+            } catch (error) {
+                alert('Network error: ' + error.message);
+            }
+        }
+
+        function handleLogout() {
+            authToken = null;
+            localStorage.removeItem('authToken');
+            loginSection.style.display = 'block';
+            dashboardSection.style.display = 'none';
+        }
+
+        async function handleGenerateKeys(e) {
+            e.preventDefault();
+            
+            const numKeys = parseInt(document.getElementById('numKeys').value);
+            const expiresAt = document.getElementById('expiresAt').value;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/admin/generate-keys`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({ numberOfKeys: numKeys, expiresAt })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert(data.message);
+                    
+                    // Show generated keys
+                    const keysContainer = document.getElementById('generatedKeys');
+                    const keysList = document.getElementById('keysList');
+                    keysList.innerHTML = '';
+                    
+                    data.keys.forEach(key => {
+                        const listItem = document.createElement('li');
+                        listItem.className = 'list-group-item';
+                        listItem.textContent = key;
+                        keysList.appendChild(listItem);
+                    });
+                    
+                    keysContainer.style.display = 'block';
+                    
+                    // Refresh the keys table
+                    loadKeys();
+                } else {
+                    alert(data.message || 'Failed to generate keys');
+                }
+            } catch (error) {
+                alert('Network error: ' + error.message);
+            }
+        }
+
+        function showDashboard() {
+            loginSection.style.display = 'none';
+            registerSection.style.display = 'none';
+            dashboardSection.style.display = 'block';
+        }
+
+        async function loadDashboardData() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/admin/dashboard`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    document.getElementById('totalKeys').textContent = data.totalKeys;
+                    document.getElementById('activeKeys').textContent = data.activeKeys;
+                    document.getElementById('usedKeys').textContent = data.usedKeys;
+                    document.getElementById('totalMessages').textContent = data.totalMessages;
+                }
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+            }
+
+            // Load keys and messages
+            loadKeys();
+            loadMessages();
+        }
+
+        async function loadKeys() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/admin/keys`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+
+                if (response.ok) {
+                    const keys = await response.json();
+                    const tbody = document.getElementById('keysTableBody');
+                    tbody.innerHTML = '';
+
+                    keys.forEach(key => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${key.key.substring(0, 10)}...</td>
+                            <td><span class="badge bg-${key.isActive && !key.used ? 'success' : 'secondary'}">${key.isActive && !key.used ? 'Active' : 'Inactive'}</span></td>
+                            <td>${key.createdBy?.username || 'N/A'}</td>
+                            <td>${key.usedBy?.username || 'N/A'}</td>
+                            <td>${new Date(key.createdAt).toLocaleString()}</td>
+                            <td>${key.usedAt ? new Date(key.usedAt).toLocaleString() : 'N/A'}</td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading keys:', error);
+            }
+        }
+
+        async function loadMessages() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/admin/messages`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+
+                if (response.ok) {
+                    const messages = await response.json();
+                    const tbody = document.getElementById('messagesTableBody');
+                    tbody.innerHTML = '';
+
+                    messages.slice(0, 10).forEach(msg => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${msg.phoneNumber}</td>
+                            <td>${msg.message}</td>
+                            <td>${new Date(msg.sentAt).toLocaleString()}</td>
+                            <td>${msg.deviceId || 'N/A'}</td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading messages:', error);
+            }
+        }
+
+        // Poll for updates every 30 seconds
+        setInterval(() => {
+            if (authToken && dashboardSection.style.display === 'block') {
+                loadDashboardData();
+            }
+        }, 30000);
+    </script>
+</body>
+</html>
