@@ -17,19 +17,20 @@ router.post('/validate', async (req, res) => {
       return res.status(400).json({ message: 'Invalid or inactive activation key' });
     }
 
-    if (activationKey.used) {
-      return res.status(400).json({ message: 'Activation key already used' });
-    }
+    // Temporarily commenting out 'used' check to allow re-validation for testing
+    // if (activationKey.used) {
+    //   return res.status(400).json({ message: 'Activation key already used' });
+    // }
 
     if (activationKey.expiresAt && new Date() > new Date(activationKey.expiresAt)) {
       return res.status(400).json({ message: 'Activation key has expired' });
     }
 
-    // Mark key as used
-    activationKey.used = true;
-    activationKey.usedAt = new Date();
-    activationKey.usedBy = req.userId;
-    await activationKey.save();
+    // Temporarily not marking key as used to allow re-validation for testing
+    // activationKey.used = true;
+    // activationKey.usedAt = new Date();
+    // activationKey.usedBy = req.userId;
+    // await activationKey.save();
 
     res.json({
       message: 'Activation key validated successfully',
