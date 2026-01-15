@@ -17,7 +17,11 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Connect to MongoDB Atlas
-mongoose.connect(process.env.MONGODB_URI, {
+const mongoUri = process.env.MONGODB_URI || 'mongodb+srv://Username:Ats@12345@clustervoter.earmcne.mongodb.net/auto_reply_db?retryWrites=true&w=majority&appName=ClustervoterUsername-ATS';
+
+console.log('Connecting to MongoDB with URI:', mongoUri.substring(0, 50) + '...');
+
+mongoose.connect(mongoUri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
