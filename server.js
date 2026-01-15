@@ -51,7 +51,7 @@ app.get('/admin', (req, res) => {
 
 // Default route
 app.get('/', (req, res) => {
-  res.json({ message: 'Auto Reply API Server is running!' });
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 const PORT = process.env.PORT || 5000;
