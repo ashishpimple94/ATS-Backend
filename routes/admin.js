@@ -1,9 +1,9 @@
 const express = require('express');
+const crypto = require('crypto');
 const { verifyToken } = require('../middleware/auth');
 const User = require('../models/User');
 const ActivationKey = require('../models/ActivationKey');
 const MessageLog = require('../models/MessageLog');
-const crypto = require('crypto');
 
 const router = express.Router();
 
